@@ -1,0 +1,57 @@
+version: '3.7'
+services:
+  basic-wallet-db:
+    container_name: "basic-wallet-db"
+    hostname: "basic-wallet-db"
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    networks:
+      - basic-wallet-network
+
+  basic-wallet-backend:
+    container_name: "basic-wallet-backend"
+    hostname: "basic-wallet-backend"
+    command: "poetry run python manage.py runserver 0.0.0.0:8000"
+    # command: "poetry shell"
+    build:
+      context: .
+      dockerfile: ./deployment/images/backend.dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/backend:/app:cached
+    env_file:
+      - .env
+    networks:
+      - basic-wallet-network
+    links:
+      - basic-wallet-db
+    depends_on:
+      - basic-wallet-db
+  
+  basic-wallet-frontend:
+    container_name: basic-wallet-frontend
+    hostname: basic-wallet-frontend
+    command: npm start
+    build:
+      context: .
+      dockerfile: ./deployment/images/frontend.dockerfile
+    volumes:
+      - ./frontend:/app:cached
+    ports:
+      - 3000:3000
+    networks:
+      - basic-wallet-network
+    links:
+      - basic-wallet-backend
+    depends_on:
+      - basic-wallet-db
+      - basic-wallet-backend
+
+networks:
+  basic-wallet-network:
+    driver: bridge

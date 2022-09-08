@@ -1,0 +1,15 @@
+.base_button {
+    border-radius: .2rem;
+    border: solid 1px transparent;
+    padding: .5rem;
+    font-size: .75rem;
+    background-color: rgba(0, 0, 0, 0.288);
+    cursor: pointer;
+    transition: ease-in .25s;
+}
+
+.base_button:hover {
+    background-color: transparent;
+    border: solid 1px #08b1db81;
+
+}

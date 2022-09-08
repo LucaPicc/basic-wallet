@@ -1,0 +1,23 @@
+.input_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.input_label {
+    font-size: .75rem;
+    text-transform: uppercase;
+}
+
+.input_elem {
+    border: solid .5px black;
+    padding: .5rem;
+    border-radius: .2rem;
+    transition: ease-in .3s;
+}
+
+.input_elem:focus {
+    outline: none;
+    border: solid .5px #08b1db;
+}

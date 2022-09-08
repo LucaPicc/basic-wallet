@@ -1,0 +1,37 @@
+.account_container {
+    background-color: #08b1db81;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-left: .5rem;
+    position: absolute;
+    top: 0;
+    padding: 1rem;
+    border: solid 1px #08b1db81;
+    border-radius: 0 0 2rem 2rem;
+}
+
+.account_info {
+    width: 80vw;
+    display: flex;
+    direction: row;
+    justify-content: space-around;
+    row-gap: 20px;
+}
+
+.account_items {
+    width: 50%;
+}
+
+.amount_value {
+    margin: 0;
+}
+.amount_title {
+    margin: 0;
+}
+
+.title {
+    font-size: 2rem;
+    text-transform: lowercase;
+}
