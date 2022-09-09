@@ -35,7 +35,7 @@ class CreateAccount(APIView):
         try:
             first_name = request.data['first-name']
             last_name = request.data['last-name']
-            username = f'{first_name} - {last_name}'
+            username = f'{first_name}.{last_name}'
             
             new_user = User.objects.create(
                 username=username,

@@ -3,6 +3,8 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 import hashlib
+from django.db.models import F
+
 
 
 class Coin(models.Model):
@@ -16,6 +18,7 @@ class Coin(models.Model):
     ]
 
     name = models.CharField(max_length=250, blank=False, null=False)
+    short_name = models.CharField(max_length=5, blank=False, null=False)
     category = models.CharField(choices=COIN_CATEGORIES, max_length=100, default=FIAT, blank=False, null=False)
     is_reference = models.BooleanField(default=False)
     value_vs_reference = models.DecimalField(max_digits=10, decimal_places=4, default=DEFAULT_VALUE_VS_REFERENCE)
@@ -95,5 +98,42 @@ class Wallet(models.Model):
     balances = models.ManyToManyField(Balance)
 
     def get_global_balance(self):
-        return 100
+        balances = self.balances.filter(category=Balance.REGULAR) \
+            .annotate(value_reference = F('coin__value_vs_reference')) \
+            .values('value_reference', 'balance')
+
+        total = 0
+        for balance in balances:
+            print(balance['value_reference'] * balance['balance'])
+            total = total + balance['value_reference'] * balance['balance']
+
+        return total
+
+    def get_blocked_balance(self):
+        balances = Balance.objects.filter(
+            transaction__transmitter=self.owner,
+            category=Balance.BLOCKED) \
+            .annotate(value_reference = F('coin__value_vs_reference')) \
+            .values('value_reference', 'balance')
+        
+        total = 0
+        for balance in balances:
+            print(balance['value_reference'] * balance['balance'])
+            total = total + balance['value_reference'] * balance['balance']
+
+        return total
+
+    def get_balance_to_be_settled(self):
+        balances = Balance.objects.filter(
+            transaction__receiver=self.owner,
+            category=Balance.BLOCKED) \
+            .annotate(value_reference = F('coin__value_vs_reference')) \
+            .values('value_reference', 'balance')
+        
+        total = 0
+        for balance in balances:
+            print(balance['value_reference'] * balance['balance'])
+            total = total + balance['value_reference'] * balance['balance']
+        
+        return total
 

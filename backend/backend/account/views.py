@@ -11,8 +11,10 @@ class AccountView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        print('request',request)
-        account = Account.objects.get(owner_id=request.GET['userid'])
+        try:
+            account = Account.objects.get(owner_id=request.GET['userid'])
+        except Account.DoesNotExist:
+            account = Account(owner_id=request.GET['userid']).save()
         serializer = AccountSerializer(account)
 
         return Response(serializer.data, status=status.HTTP_200_OK)

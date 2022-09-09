@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
 class CoinSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
     name = serializers.CharField(required=True, max_length=100)
+    short_name = serializers.CharField(required=True, max_length=10)
     category = serializers.CharField(required=True, max_length=100)
     is_reference = serializers.BooleanField(required=True)
     value_vs_reference = serializers.FloatField(required=True)

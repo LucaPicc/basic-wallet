@@ -1,15 +1,13 @@
 .account_container {
-    background-color: #08b1db81;
+    margin: 1rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding-left: .5rem;
-    position: absolute;
-    top: 0;
     padding: 1rem;
     border: solid 1px #08b1db81;
-    border-radius: 0 0 2rem 2rem;
+    border-radius: .5rem .5rem;
+    max-width: 350px;
 }
 
 .account_info {
@@ -20,18 +18,71 @@
     row-gap: 20px;
 }
 
-.account_items {
-    width: 50%;
-}
-
 .amount_value {
     margin: 0;
 }
 .amount_title {
+    font-size: .75rem;
+    font-weight: 200;
+}
+
+.account_amount {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.amount_blocked {
+    font-size: .75rem;
+    color: red;
     margin: 0;
 }
 
-.title {
-    font-size: 2rem;
-    text-transform: lowercase;
+.funds_to_be_settled {
+    font-size: .75rem;
+    color: green;
+    margin: 0;
+}
+
+.home_head {
+    background-color: #08b1db81;
+    border: solid 1px #08b1db81;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: .5rem 1.5rem;
+    align-items: center;
+    border-bottom-right-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+}
+
+.home_head__start {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.home_head__end {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.deposit-action {
+    display: flex;
+    background-color: rgba(63, 143, 63, 0.582);
+    border: solid 1px rgba(63, 143, 63, 0.582);
+    margin-top: 10px;
+    font-size: 1rem;
+    border-radius: .2rem .2rem;
+    padding: .4rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.deposit-action:hover {
+    border: solid 1px green;
+
 }

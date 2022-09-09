@@ -96,20 +96,20 @@ class TransactionsView(APIView):
         return Response(transactions, status=status.HTTP_200_OK)
 
     def post(self, request):
-        operation = request.POST.get('operation')
+        operation = request.data['operation']
         if operation == Transactions.DEPOSIT:
             return self.create_deposit_transaction(
-                request.POST.get('transmitter'),
-                request.POST.get('coin'),
-                request.POST.get('amount')
+                request.data['transmitter'],
+                request.data['coin'],
+                request.data['amount']
             )
         
         if operation == Transactions.SEND:
             return self.create_send_transaction(
-                request.POST.get('transmitter'),
-                request.POST.get('receiver'),
-                request.POST.get('coin'),
-                request.POST.get('amount')
+                request.data['transmitter'],
+                request.data['receiver'],
+                request.data['coin'],
+                request.data['amount']
             )
         
 
