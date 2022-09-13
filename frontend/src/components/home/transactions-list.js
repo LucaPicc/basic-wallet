@@ -1,45 +1,43 @@
-import 'styles/transactions-list.css'
+import 'styles/transactions-list.css';
 
-import SendIcon from 'components/icons/send-icon';
-import TransactionCard from './transaction-card';
+import { useEffect, useState } from 'react';
+
+import BasicCard from 'components/basic-card';
+import TransactionCard from './transaction-card/transaction-card';
+import { getTransactions } from 'api/api';
+import { useAuth } from 'hooks/useAuth';
 
 const TransactionsList = () => {
-    const transactions_list = [
-        {
-            operation: 'send',
-            amount: 1000,
-            coin: 'USD',
-            code: 'askjdha7856as7fasfg78w'
-        },
-        {
-            operation: 'send',
-            amount: 1000,
-            coin: 'USD',
-            code: 'askjdha7856as7fasfg78w'
-        },
-        {
-            operation: 'send',
-            amount: 1000,
-            coin: 'USD',
-            code: 'askjdha7856as7fasfg78w'
+    const { token, userid } = useAuth();
+    const [ transactions, setTransactions ] = useState([])
+
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            await getTransactions(token, userid)
+                .then((data) => setTransactions(data))
+                .catch((error) => console.error(error))
         }
-    ]
+
+        fetchTransactions();
+    }, [token, userid])
 
     return (
-        <div className='list_container'>
+        <BasicCard>
             <div className='list_head'>TRANSACTIONS</div>
             <div className='list_body'>{
-                transactions_list.map((trans, index) => (
+                transactions.map((trans, index) => (
                     <TransactionCard
                         key={index}
                         operation={trans.operation}
                         coin={trans.coin}
                         code={trans.code}
                         amount={trans.amount}
+                        created={trans.created}
+                        receiver={trans.receiver}
                     />
                 ))
             }</div>
-        </div>
+        </BasicCard>
     )
 };
 

@@ -99,10 +99,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'USER': 'root',
+        'PASSWORD': os.environ.get('MYSQL_ROOT_PASSWORD'),
         'HOST': 'basic-wallet-db',
-        'PORT': 3306
+        'PORT': 3306,
+        'TEST': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test.db',
+        },
     }
 }
 

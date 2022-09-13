@@ -7,7 +7,8 @@
     padding: 1rem;
     border: solid 1px #08b1db81;
     border-radius: .5rem .5rem;
-    max-width: 350px;
+    max-width: 500px;
+    min-width: 350px;
 }
 
 .account_info {
@@ -24,6 +25,9 @@
 .amount_title {
     font-size: .75rem;
     font-weight: 200;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .account_amount {
@@ -85,4 +89,11 @@
 .deposit-action:hover {
     border: solid 1px green;
 
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 20px;
 }

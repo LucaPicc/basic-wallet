@@ -1,0 +1,13 @@
+.deposit_form {
+    width: 100%;
+}
+
+.deposit_form__action {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+    justify-content: flex-start;
+    margin-top: 20px;
+    
+}

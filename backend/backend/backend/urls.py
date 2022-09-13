@@ -20,8 +20,8 @@ from .views import CreateAccount, Login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', Login.as_view()),
-    path('create_account/', CreateAccount.as_view()),
+    path('auth/', Login.as_view(), name='auth'),
+    path('create_account/', CreateAccount.as_view(), name='create_account'),
     path('api/', include('coins.urls')),
     path('api/', include('account.urls'))
 ]

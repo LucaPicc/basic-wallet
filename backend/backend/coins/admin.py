@@ -22,7 +22,7 @@ class WalletModelAdmin(admin.ModelAdmin):
 @admin.register(Balance)
 class BalanceModelAdmin(admin.ModelAdmin):
     fields = ['owner', 'coin', 'category', 'balance', 'transaction']
-    list_display = ['get_owner_name', 'get_coin_name', 'category', 'balance']
+    list_display = ['get_owner_name', 'get_coin_name', 'category', 'balance', 'transaction']
 
     def get_owner_name(self, obj:Balance) -> str:
         return obj.owner.username

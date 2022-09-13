@@ -74,7 +74,7 @@ class Transactions(models.Model):
             if operation == self.WITHDRAWAL:
                 return '--'
         
-        return f'{self.transmitter} {get_symbol(self.operation)} {self.receiver} ({self.coin.name}{self.amount})'
+        return f'[{self.id}]{self.transmitter} {get_symbol(self.operation)} {self.receiver} ({self.coin.name}{self.amount})'
 
 
 class Balance(models.Model):
@@ -104,7 +104,6 @@ class Wallet(models.Model):
 
         total = 0
         for balance in balances:
-            print(balance['value_reference'] * balance['balance'])
             total = total + balance['value_reference'] * balance['balance']
 
         return total
@@ -118,7 +117,6 @@ class Wallet(models.Model):
         
         total = 0
         for balance in balances:
-            print(balance['value_reference'] * balance['balance'])
             total = total + balance['value_reference'] * balance['balance']
 
         return total
@@ -132,7 +130,6 @@ class Wallet(models.Model):
         
         total = 0
         for balance in balances:
-            print(balance['value_reference'] * balance['balance'])
             total = total + balance['value_reference'] * balance['balance']
         
         return total

@@ -1,6 +1,6 @@
 from account.models import Account
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -42,7 +42,7 @@ class CreateAccount(APIView):
                 first_name=first_name,
                 last_name=last_name,
                 email=request.data['email'],
-                password=request.data['password']
+                password=make_password(request.data['password'])
             )
 
             Account.objects.create(owner=new_user)
@@ -51,7 +51,7 @@ class CreateAccount(APIView):
 
             return Response(
                 {
-                    'user-id': new_user.id,
+                    'userid': new_user.id,
                     'token': token.key
                 },
                 status=status.HTTP_201_CREATED

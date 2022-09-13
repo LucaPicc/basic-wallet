@@ -7,6 +7,7 @@
     padding: 1rem;
     border: solid 1px #08b1db81;
     border-radius: .5rem .5rem;
+    min-width: 300px;
     max-width: 350px;
 }
 
@@ -17,8 +18,16 @@
 }
 
 .list_body {
-    width: 100%;
+    max-height: 860px;
+    overflow-y: scroll;
 }
+
+.list_body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    display: none;
+}
+
 
 .card {
     display: flex;
@@ -28,13 +37,15 @@
     border-radius: .5rem .5rem;
     margin-bottom: 20px;
     padding: 5%;
+    width: 100%;
 }
 
 .card_header {
     font-size: .7rem;
     text-align: start;
     margin-bottom: 10px;
-    color: grey
+    color: grey;
+    width: 100%;
 }
 
 .card_body {
@@ -42,6 +53,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
 .card_body__icon {
@@ -50,7 +62,29 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    border: solid 1px green;
+    border: solid 1px #08b1db81;
     border-radius: 50% 50%;
-    fill: green;
+    fill: #08b1db81;
+}
+
+.card_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.operation_info {
+    font-size: .7rem;
+}
+
+.receiver_info {
+    font-size: .75rem;
+    color: grey;
+}
+
+.card_body__operation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

@@ -3,13 +3,13 @@ import { createContext, useContext, useState } from "react";
 const AccountContext = createContext({});
 
 export const AccountContextProvider = ({children}) => {
-    const [auth, setAuth] = useState({});
+    const [account, setAccount] = useState({});
 
     return (
-        <AccountContext.Provider value={{ auth:auth, setAuth: setAuth }}>
+        <AccountContext.Provider value={{ account: account, setAccount: setAccount }}>
             {children}
         </AccountContext.Provider>
     );
 }
 
-export const useAuth = () => useContext(AccountContext);
+export const useAccount = () => useContext(AccountContext);

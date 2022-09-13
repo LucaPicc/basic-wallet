@@ -1,0 +1,12 @@
+.basic_card__container {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 1rem;
+    border: solid 1px #08b1db81;
+    border-radius: .5rem .5rem;
+    max-width: 350px;
+    min-width: 300px;
+}

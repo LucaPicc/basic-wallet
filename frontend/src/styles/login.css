@@ -6,13 +6,12 @@
     align-items: center;
     justify-items: center;
     align-content: center;
-    background-color: white;
+    background-color: white !important;
 }
 
 .form_container {
     border: solid 1px black;
     width: 400px;
-    height: 500px;
     border-radius: .2rem;
     padding-top: 5rem;
     background-color: rgba(255, 255, 255, 0.8);

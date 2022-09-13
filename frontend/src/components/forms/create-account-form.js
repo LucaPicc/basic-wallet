@@ -3,16 +3,16 @@ import 'styles/login.css';
 import Button from 'components/buttons/button';
 import { Link } from 'react-router-dom';
 import TextInput from './input/text-input';
-import { login } from 'api/api';
+import { createAccount } from 'api/api';
 import { useAuth } from 'hooks/useAuth';
 import { useForm } from 'react-hook-form';
 
-const LoginForm = () => {
+const CreateAccountForm = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const { setAuth } = useAuth();
 
     const onSubmit = async (data) => {
-        await login(data)
+        await createAccount(data)
             .then((auth) => {
                 setAuth(auth.token, auth.userid);
             })
@@ -22,33 +22,17 @@ const LoginForm = () => {
     }
 
     return (
-
         <form onSubmit={handleSubmit(onSubmit)} className='form_input_container'>
-            <TextInput label='username' type={'text'} props={register('username', { required: true })} />
+            <TextInput label='first name' type={'text'} props={register('first-name', { required: true })} />
+            <TextInput label='last name' type={'text'} props={register('last-name', { required: true })} />
+            <TextInput label='email' type={'email'} props={register('email', { required: true })} />
             <TextInput label='password' type={'password'} props={register('password', { required: true })} />
             <div className='form_keypad'>
-                <Button label='LOGIN' props={{ type: 'submit' }} />
-                <Link to={'/create-account/'}>SIGIN</Link>
-            </div>
-            <div className='display_erros'>
-                {
-                    errors.username && (
-                        <p>username is required</p>
-                    )
-                }
-                {
-                    errors.password && (
-                        <p>password is required</p>
-                    )
-                }
-                {
-                    errors.login && (
-                        <p>errors.login</p>
-                    )
-                }
+                <Button label='SIGIN' type='submit'/>
+                <Link to={'/'}>CANCEL</Link>
             </div>
         </form>
     );
 }
 
-export default LoginForm
+export default CreateAccountForm

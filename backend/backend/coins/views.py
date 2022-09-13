@@ -2,22 +2,21 @@ from .models import Balance, Coin, Transactions
 from .serializers import BalanceSerializer, CoinSerializer, TransactionSerializer
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-class CoinList(APIView):
+class CoinList(ListAPIView):
     permission_classes=[IsAuthenticated]
-    
-    def get(self, request):
-        serializer = CoinSerializer(Coin.objects.all(), many=True)
-        return Response(serializer.data)
+    queryset=Coin.objects.all()
+    serializer_class=CoinSerializer
 
 
 class TransactionsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def create_send_transaction(self, transmitter:int, receiver:int, coin:int, amount:float) -> Response:
-        balance = Balance.objects.get(owner_id=transmitter, coin_id=coin)
+        balance = Balance.objects.get(owner_id=transmitter, coin_id=coin, category=Balance.REGULAR)
         if not float(balance.balance) >= float(amount):
             return Response({'message': 'insufficient funds'}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -64,13 +63,15 @@ class TransactionsView(APIView):
         try:
             balance = Balance.objects.get(
                 owner_id=transmitter,
-                coin_id=coin
+                coin_id=coin,
+                category=Balance.REGULAR
             )
         except Balance.DoesNotExist:
             balance = Balance.objects.create(
                 owner_id=transmitter,
                 coin_id=coin,
-                balance=0.0000
+                balance=0.0000,
+                category=Balance.REGULAR
             )
         balance.balance = float(balance.balance) + float(amount)
         balance.save()
@@ -86,14 +87,85 @@ class TransactionsView(APIView):
             status=status.HTTP_202_ACCEPTED
         )
 
-    def get(self, request):
-        
-        transactions = [{
-            'code': transactions[0],
-            'name': transactions[1]
-        } for transactions in Transactions.TRANSACTIONS_TYPE]
+    def reception_funds(self, transaction, userid):
+        block_found = Balance.objects.get(
+            transaction=transaction)
 
-        return Response(transactions, status=status.HTTP_200_OK)
+        transaction = Transactions.objects.get(
+            id=transaction)
+
+        balance = Balance.objects.get(
+            coin=block_found.coin,
+            category=Balance.REGULAR,
+            owner=transaction.receiver)
+
+        
+        balance.balance = balance.balance + block_found.balance
+        block_found.delete()
+        transaction.valid = True
+        
+        balance.save()
+        transaction.save()
+
+        Transactions.objects.create(
+            transmitter_id=userid,
+            receiver_id=userid,
+            operation=Transactions.RECEPTION,
+            coin=transaction.coin,
+            amount=transaction.amount
+        )
+
+        return Response({'message':'operation acept'}, status=status.HTTP_202_ACCEPTED)
+
+    def withdrawal_funds(self, transmitter:int , coin:int, amount:float):
+        try:
+            balance = Balance.objects.get(
+                owner_id=transmitter,
+                coin_id=coin,
+                category=Balance.REGULAR
+            )
+
+        except Balance.DoesNotExist:
+            balance = Balance.objects.create(
+                owner_id=transmitter,
+                coin_id=coin,
+                balance=0.0000,
+                category=Balance.REGULAR
+            )
+
+        if float(balance.balance) < float(amount):
+            return Response({'message': 'insufficient funds'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        balance.balance = float(balance.balance) - float(amount)
+        balance.save()
+
+        Transactions.objects.create(
+            transmitter_id=transmitter,
+            receiver_id=transmitter,
+            operation=Transactions.WITHDRAWAL,
+            coin_id=coin,
+            amount=amount
+        )
+
+        return Response(BalanceSerializer(balance).data, status=status.HTTP_202_ACCEPTED)
+
+    def get(self, request, *args, **kwargs):
+        
+        try:
+            query = Transactions.objects.get(code=request.GET['code'])
+            transaction = TransactionSerializer(query)
+            return Response(transaction.data, status=status.HTTP_200_OK)
+        
+        except KeyError:
+            query = Transactions.objects.filter(
+                transmitter=request.GET['userid']
+            ).order_by('-created')
+
+            transactions = TransactionSerializer(
+                query,
+                many=True)
+
+            return Response(transactions.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         operation = request.data['operation']
@@ -111,7 +183,35 @@ class TransactionsView(APIView):
                 request.data['coin'],
                 request.data['amount']
             )
-        
 
+        if operation == Transactions.RECEPTION:
+            return self.reception_funds(
+                request.data['transaction'],
+                request.data['userid']
+            )
+        
+        if operation == Transactions.WITHDRAWAL:
+            return self.withdrawal_funds(
+                request.data['transmitter'],
+                request.data['coin'],
+                request.data['amount']
+            )
 
         return Response({'message': 'operation not support'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+class BlockedTransactionsView(APIView):
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        query = Balance.objects.filter(
+            category=Balance.BLOCKED,
+            transaction__receiver=request.GET['userid']
+        ).select_related('transaction')
+
+        transactions = [Transactions.objects.get(id=blocked.transaction.id) for blocked in query]
+
+        transaction_serializer = TransactionSerializer(transactions, many=True)
+
+        return Response(transaction_serializer.data, status=status.HTTP_200_OK)
+        

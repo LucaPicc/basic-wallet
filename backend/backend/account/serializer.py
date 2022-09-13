@@ -26,3 +26,7 @@ class AccountSerializer(serializers.Serializer):
 
     def get_funds_to_be_settled(self, obj):
         return obj.wallet.get_balance_to_be_settled()
+
+class UserOptionSerializer(serializers.Serializer):
+    id=serializers.IntegerField(required=True)
+    username=serializers.CharField(required=True, max_length=200)

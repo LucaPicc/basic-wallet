@@ -1,11 +1,11 @@
-import '../../styles/buttons.css';
+import 'styles/buttons.css';
 
-const Button = ({label, invert, onClick}) => {
+const Button = ({label, invert, onClick, props}) => {
     return (
         <button
             onClick={onClick}
             className='base_button'
-            type='submit'
+            {...props}
         >
             {label}
         </button>

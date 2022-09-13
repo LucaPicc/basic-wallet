@@ -18,7 +18,7 @@ def create_basic_coins(apps, schema_editor):
             'short_name': 'ARS',
             'is_reference': False,
             'category': 'fiat',
-            'value_vs_reference': 300.0000
+            'value_vs_reference': 0.0033
         }
     ]
     Coins = apps.get_model('coins', 'Coin')
