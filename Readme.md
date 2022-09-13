@@ -14,9 +14,9 @@ The following frameworks and libraries were used for the creation of the fronten
 - React Cookie
 
 ## Project start-up:
-In root project run ***docker-compose up***. Next step is run migrations ***docker exec -it poetry run python manage.py migrate***.
+In root project run ***docker-compose up***. Next step is run migrations ***docker exec -it basic-wallet-backend poetry run python manage.py migrate***.
 
-With this you can create a super user alternatively to access the ui and admin as follows ***docker exec -it poetry run python manage.py createsuperuser***
+With this you can create a super user alternatively to access the ui and admin as follows ***docker exec -it basic-wallet-backend poetry run python manage.py createsuperuser***
 
 Alternatively the UI offers a user registration interface in ***http://localhost:3000/create-account/***
 
@@ -39,6 +39,9 @@ Transactions can be of 4 types:
 - Send: this transaction allows the user to send money to another user in a selected currency. It is verified that this amount is held in the selected currency. When this transaction is made, the amount is blocked until the receiving user confirms the transaction, at which time the amount is released in the recipient's account.
 
 - Reception: this transaction allows the blocked amount to be released due to a money transfer operation.
+
+## Run test
+To run django tests ***docker exec -it basic-wallet-backend poetry run python manage.py test***
 
 ## Immediate improvements to the project:
 - Added more unittest
